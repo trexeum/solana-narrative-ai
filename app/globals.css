@@ -1,0 +1,75 @@
+@import "tailwindcss";
+
+@theme inline {
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --color-solana-purple: #9945ff;
+  --color-solana-green: #14f195;
+  --color-solana-dark: #050508;
+  --color-solana-card: #0c0c10;
+}
+
+:root {
+  color-scheme: dark;
+  --background: #030303;
+  --foreground: #f4f4f5;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+}
+
+::selection {
+  background: color-mix(in oklab, #9945ff 35%, transparent);
+  color: #fff;
+}
+
+/* Generate Posts loading shimmer */
+@keyframes sn-generate-shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes sn-generate-bar {
+  0% {
+    transform: translateX(-30%);
+    opacity: 0.85;
+  }
+  50% {
+    transform: translateX(120%);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(-30%);
+    opacity: 0.85;
+  }
+}
+
+.sn-generate-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.sn-generate-shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 0%,
+    rgba(153, 69, 255, 0.12) 45%,
+    rgba(20, 241, 149, 0.1) 55%,
+    transparent 100%
+  );
+  animation: sn-generate-shimmer 1.6s ease-in-out infinite;
+}
+
+.sn-generate-indeterminate-bar {
+  animation: sn-generate-bar 1.4s ease-in-out infinite;
+}
