@@ -1,5 +1,6 @@
 import OpenAI from "openai";
 import { NextResponse } from "next/server";
+import { getUserPlan } from "@/lib/usage-limits";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -7,8 +8,9 @@ const openai = new OpenAI({
 
 export async function POST(req: Request) {
   try {
+    const plan = getUserPlan();
     const body = await req.json();
-    const topic = body.topic || body.prompt || "Solana crypto project";
+    const topic = body.topic || body.prompt || "crypto project";
 
     const completion = await openai.chat.completions.create({
       model: "gpt-4.1-mini",
@@ -16,14 +18,14 @@ export async function POST(req: Request) {
         {
           role: "system",
           content:
-            "You are SolPulse, an expert crypto content strategist. Generate short, viral, high-energy X posts for crypto founders and Solana CT. Keep them sharp, natural, and not cringe.",
+            "You are SolPulse, a crypto-native content strategist. Generate sharp, viral X posts for blockchain founders. Make them natural, punchy, high-conviction, and not cringe. No fake guarantees. No financial advice.",
         },
         {
           role: "user",
-          content: `Generate 5 X posts about: ${topic}`,
+          content: `Generate 5 launch-ready X posts about: ${topic}`,
         },
       ],
-      temperature: 0.9,
+      temperature: 0.85,
     });
 
     const text = completion.choices[0]?.message?.content || "";
@@ -34,7 +36,14 @@ export async function POST(req: Request) {
       .filter(Boolean)
       .slice(0, 5);
 
-    return NextResponse.json({ posts });
+    return NextResponse.json({
+      posts,
+      plan,
+      upgradeMessage:
+        plan === "free"
+          ? "Free users get 5 generations/day. Upgrade soon for more."
+          : null,
+    });
   } catch (error) {
     console.error(error);
 

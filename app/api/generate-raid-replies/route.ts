@@ -1,5 +1,6 @@
 import OpenAI from "openai";
 import { NextResponse } from "next/server";
+import { getUserPlan } from "@/lib/usage-limits";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -7,8 +8,9 @@ const openai = new OpenAI({
 
 export async function POST(req: Request) {
   try {
+    const plan = getUserPlan();
     const body = await req.json();
-    const tweet = body.tweet || "Solana project update";
+    const tweet = body.tweet || body.prompt || "crypto project update";
 
     const completion = await openai.chat.completions.create({
       model: "gpt-4.1-mini",
@@ -16,11 +18,11 @@ export async function POST(req: Request) {
         {
           role: "system",
           content:
-            "You are SolPulse, a viral crypto Twitter reply expert. Generate 5 short CT-style replies. Make them confident, punchy, and high-engagement. No hate, no slurs, no scams.",
+            "You are SolPulse, a crypto Twitter reply strategist. Generate short, viral, high-engagement replies for blockchain founders. Make them natural, punchy, confident, and not cringe. No hate, no slurs, no scams, no financial advice.",
         },
         {
           role: "user",
-          content: `Generate 5 replies to this tweet: ${tweet}`,
+          content: `Generate 5 raid-ready replies to this tweet or idea: ${tweet}`,
         },
       ],
       temperature: 0.9,
@@ -34,7 +36,14 @@ export async function POST(req: Request) {
       .filter(Boolean)
       .slice(0, 5);
 
-    return NextResponse.json({ replies });
+    return NextResponse.json({
+      replies,
+      plan,
+      upgradeMessage:
+        plan === "free"
+          ? "Free users get 5 generations/day. Upgrade soon for more."
+          : null,
+    });
   } catch (error) {
     console.error(error);
 
