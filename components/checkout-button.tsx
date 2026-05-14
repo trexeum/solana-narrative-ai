@@ -15,7 +15,7 @@ export function CheckoutButton({
       return;
     }
 
-    const res = await fetch("/api/create-checkout-session", {
+    const res = await fetch("/api/ziina/checkout", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
