@@ -15,27 +15,35 @@ export function CheckoutButton({
       return;
     }
 
-    const res = await fetch("/api/ziina/checkout", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ plan }),
-    });
+    try {
+      const res = await fetch("/api/create-checkout-session", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ plan }),
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (data.url) {
+      if (!res.ok || !data.url) {
+        console.error(data);
+        alert("Payment link failed. Check Ziina API key or route.");
+        return;
+      }
+
       window.location.href = data.url;
-    } else {
+    } catch (error) {
+      console.error(error);
       alert("Checkout failed. Try again.");
     }
   }
 
   return (
     <button
+      type="button"
       onClick={handleClick}
-      className={`mt-8 inline-flex h-11 items-center justify-center rounded-full text-sm font-semibold transition ${
+      className={`mt-8 inline-flex h-12 w-full items-center justify-center rounded-full px-6 text-sm font-semibold transition ${
         featured
           ? "bg-gradient-to-r from-solana-purple to-emerald-500 text-black hover:brightness-110"
           : "border border-white/15 text-white hover:border-solana-purple/40 hover:bg-white/[0.04]"
