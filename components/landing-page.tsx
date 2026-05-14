@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { AuthLandingNav } from "./auth-landing-nav";
 import { WaitlistForm } from "./waitlist-form";
-
+import { CheckoutButton } from "./checkout-button";
 const nav = [
   { href: "#problem", label: "Problem" },
   { href: "#features", label: "Features" },
