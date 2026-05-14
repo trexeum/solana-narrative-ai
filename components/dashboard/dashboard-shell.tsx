@@ -124,7 +124,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
         >
           <LogoMark />
           <span className="truncate text-sm font-semibold text-white">
-            SolanaNarrativeAI
+          SolPulse
           </span>
         </Link>
 
@@ -166,7 +166,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
               <LogoMark />
               <div className="min-w-0 leading-tight">
                 <p className="truncate text-sm font-semibold text-white">
-                  SolanaNarrativeAI
+                SolPulse
                 </p>
                 <p className="font-mono text-[10px] uppercase tracking-wider text-zinc-500">
                   Dashboard
