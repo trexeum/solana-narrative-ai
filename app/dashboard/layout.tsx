@@ -1,15 +1,24 @@
 import type { Metadata } from "next";
-import { DashboardShell } from "@/components/dashboard/dashboard-shell";
+import { Analytics } from "@vercel/analytics/react";
+import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Dashboard — SolanaNarrativeAI",
-  description: "Generate posts, raids, narratives, and calendars for Solana.",
+  title: "SolPulse",
+  description:
+    "Track Solana narratives, CT momentum, viral posts, and early alpha signals.",
 };
 
-export default function DashboardLayout({
+export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return <DashboardShell>{children}</DashboardShell>;
+  return (
+    <html lang="en">
+      <body>
+        {children}
+        <Analytics />
+      </body>
+    </html>
+  );
 }
