@@ -1,46 +1,72 @@
-import { SignIn } from "@clerk/nextjs";
-import type { Metadata } from "next";
-import Link from "next/link";
-import { clerkAppearance } from "@/lib/clerk-appearance";
+"use client";
 
-export const metadata: Metadata = {
-  title: "Sign in — SolanaNarrativeAI",
-  description: "Sign in to your SolanaNarrativeAI workspace.",
-};
+import { useState } from "react";
+import { supabase } from "@/lib/supabase-client";
 
 export default function SignInPage() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  async function handleSignIn(e: React.FormEvent) {
+    e.preventDefault();
+    setLoading(true);
+
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (error) {
+      alert(error.message);
+      setLoading(false);
+      return;
+    }
+
+    window.location.href = "/dashboard";
+  }
+
   return (
-    <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-black px-4 py-16">
-      <div
-        className="pointer-events-none absolute inset-0 -z-10"
-        aria-hidden
+    <main className="flex min-h-screen items-center justify-center bg-black px-6 text-white">
+      <form
+        onSubmit={handleSignIn}
+        className="w-full max-w-md rounded-3xl border border-white/10 bg-white/[0.03] p-8"
       >
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(153,69,255,0.22),transparent)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_40%_at_100%_50%,rgba(20,241,149,0.06),transparent)]" />
-      </div>
+        <h1 className="text-4xl font-black">Welcome back</h1>
+        <p className="mt-2 text-zinc-400">Log in to your SolPulse account.</p>
 
-      <Link
-        href="/"
-        className="absolute left-4 top-4 text-sm text-zinc-500 transition duration-300 hover:text-solana-green sm:left-6 sm:top-6"
-      >
-        ← Home
-      </Link>
+        <input
+          className="mt-8 w-full rounded-xl border border-white/10 bg-black px-4 py-3 text-white outline-none"
+          placeholder="Email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
 
-      <SignIn
-        appearance={clerkAppearance}
-        fallbackRedirectUrl="/dashboard"
-        signUpUrl="/sign-up"
-      />
+        <input
+          className="mt-4 w-full rounded-xl border border-white/10 bg-black px-4 py-3 text-white outline-none"
+          placeholder="Password"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
 
-      <p className="mt-8 text-center text-xs text-zinc-600">
-        New here?{" "}
-        <Link
-          href="/sign-up"
-          className="font-medium text-solana-green underline-offset-4 transition hover:text-emerald-300 hover:underline"
+        <button
+          disabled={loading}
+          className="mt-6 w-full rounded-xl bg-gradient-to-r from-solana-purple to-emerald-400 px-4 py-3 font-semibold text-black"
         >
-          Create an account
-        </Link>
-      </p>
-    </div>
+          {loading ? "Signing in..." : "Sign in"}
+        </button>
+
+        <p className="mt-6 text-center text-sm text-zinc-500">
+          No account yet?{" "}
+          <a href="/sign-up" className="text-emerald-400">
+            Create one
+          </a>
+        </p>
+      </form>
+    </main>
   );
 }
