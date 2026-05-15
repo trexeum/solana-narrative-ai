@@ -62,7 +62,34 @@ const plans: {
 export function LandingPage() {
   return (
     <main className="min-h-screen bg-black text-white">
-      <section className="mx-auto flex max-w-7xl flex-col items-center px-6 py-28 text-center">
+      <header className="fixed left-0 top-0 z-50 w-full border-b border-white/10 bg-black/70 backdrop-blur-xl">
+        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
+          <Link href="/" className="flex items-center gap-3">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-r from-solana-purple to-emerald-400 font-black text-black">
+              S
+            </div>
+            <span className="text-lg font-bold">SolPulse</span>
+          </Link>
+
+          <div className="flex items-center gap-3">
+            <Link
+              href="/sign-in"
+              className="rounded-full border border-white/10 px-5 py-2 text-sm font-semibold text-white hover:border-emerald-400/50"
+            >
+              Sign in
+            </Link>
+
+            <Link
+              href="/sign-up"
+              className="rounded-full bg-gradient-to-r from-solana-purple to-emerald-400 px-5 py-2 text-sm font-semibold text-black"
+            >
+              Start free
+            </Link>
+          </div>
+        </div>
+      </header>
+
+      <section className="mx-auto flex max-w-7xl flex-col items-center px-6 pb-28 pt-40 text-center">
         <div className="mb-4 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-1 text-xs uppercase tracking-[0.3em] text-emerald-400">
           SolPulse is live
         </div>
@@ -77,13 +104,16 @@ export function LandingPage() {
         </p>
 
         <div className="mt-10 flex flex-wrap justify-center gap-4">
-          <CheckoutButton plan="free" featured>
+          <Link
+            href="/sign-up"
+            className="rounded-full bg-gradient-to-r from-solana-purple to-emerald-400 px-10 py-4 font-semibold text-black"
+          >
             Start free
-          </CheckoutButton>
+          </Link>
 
           <Link
             href="#pricing"
-            className="inline-flex h-11 items-center justify-center rounded-full border border-white/15 px-8 text-sm font-semibold text-white hover:border-solana-purple/40"
+            className="rounded-full border border-white/15 px-10 py-4 font-semibold text-white hover:border-solana-purple/40"
           >
             View plans
           </Link>
